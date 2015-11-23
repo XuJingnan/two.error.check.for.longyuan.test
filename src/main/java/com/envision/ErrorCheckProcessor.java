@@ -76,6 +76,7 @@ public class ErrorCheckProcessor extends Configured implements Tool {
         job.setReducerClass(ErrorCheckReducer.class);
 
         job.setInputFormatClass(CombineTextInputFormat.class);
+        job.getConfiguration().setLong(FileInputFormat.SPLIT_MAXSIZE, 256 * 1024 * 1024);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(IntWritable.class);
         job.setOutputFormatClass(TextOutputFormat.class);
