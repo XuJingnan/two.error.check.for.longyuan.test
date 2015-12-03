@@ -40,9 +40,10 @@ public class ErrorCheckProcessor extends Configured implements Tool {
     arg10: separator flag [:0":","    "1":"\001"    other string:"\t"]
 
     arg11: reduce number
+    arg12: split size(MB):256 ~ 1024
 
     cmd example:
-    hadoop jar longyuan.test.error.check-1.0.jar com.envision.ErrorCheckProcessor input/machinedata output/error.check "2015-11-11 00:00:00" "2015-11-11 00:00:05" 1 40.0 "2015-11-11 00:00:11" "2015-11-11 00:00:15" 1 30.0 0 2
+    hadoop jar longyuan.test.error.check-1.0.jar com.envision.ErrorCheckProcessor input/machinedata output/mr/check "2015-11-11 00:00:00" "2015-11-11 00:00:05" 1 40.0 "2015-11-11 00:00:11" "2015-11-11 00:00:15" 1 30.0 0 2 1024
      */
     public int run(String[] args) throws Exception {
         log.info("starting");
@@ -76,7 +77,9 @@ public class ErrorCheckProcessor extends Configured implements Tool {
         job.setReducerClass(ErrorCheckReducer.class);
 
         job.setInputFormatClass(CombineTextInputFormat.class);
-        job.getConfiguration().setLong(FileInputFormat.SPLIT_MAXSIZE, 256 * 1024 * 1024);
+        job.getConfiguration().setLong(FileInputFormat.SPLIT_MAXSIZE, Integer.parseInt(args[12]) * 1024 * 1024);
+        job.getConfiguration().setLong(FileInputFormat.SPLIT_MINSIZE, Integer.parseInt(args[12]) * 1024 * 1024);
+        FileInputFormat.setInputDirRecursive(job, true);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(IntWritable.class);
         job.setOutputFormatClass(TextOutputFormat.class);

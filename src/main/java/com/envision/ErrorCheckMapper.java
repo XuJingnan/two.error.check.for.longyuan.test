@@ -41,7 +41,9 @@ public class ErrorCheckMapper extends Mapper<LongWritable, Text, Text, IntWritab
 
     @Override
     protected void map(LongWritable offset, Text value, Context context) throws IOException, InterruptedException {
-        record = value.toString().split(separator);
+        String tmp = value.toString();
+        tmp = tmp.substring(0, tmp.length() - 1);
+        record = tmp.split(separator);
         if (check1.match()) {
             if (set1.size() == maxSetSize) {
                 write(context, set1, one);
@@ -88,7 +90,7 @@ public class ErrorCheckMapper extends Mapper<LongWritable, Text, Text, IntWritab
                 tagIndex = Tools.getInt(config, Tools.secondTagIndex, 1) + Tools.preIndex - 1;
                 tagThreshold = Tools.getDouble(config, Tools.secondTagThreshold, 0.0);
             }
-            log.info(this);
+//            log.info(this);
         }
 
         public boolean match() {

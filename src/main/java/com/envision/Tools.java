@@ -52,4 +52,12 @@ public class Tools {
     public static void setDouble(Configuration config, String name, double value) {
         config.setDouble(name, value);
     }
+
+    public static String getID(String mapredTaskID, boolean isMap) {
+        if (isMap) {
+            return mapredTaskID.split("m_")[1].split("_")[0];
+        } else {
+            return mapredTaskID.split("r_")[1].split("_")[0];
+        }
+    }
 }
